@@ -11,9 +11,9 @@ public class UrlResourceTest {
 	@SuppressWarnings("resource")
 	@Test public void test() {
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring-context.xml");
+		
 		Person person = context.getBean(Person.class);
 		person.setPersonAge(35);
-		
 		System.out.println(person);
 	}
 }

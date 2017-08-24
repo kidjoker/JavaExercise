@@ -20,6 +20,8 @@ public class MainTest {
 	public static void main(String[] args) {
 		Calculator c1 = new CalculatorImpl();
 		
+		ProxyUtils.saveProxyClass("D:\\aaa.class", "bbb", Calculator.class.getInterfaces());
+		
 		CalculatorHandler handler = new CalculatorHandler(c1);
 		
 		Calculator c2 = (Calculator)Proxy.newProxyInstance(handler.getClass().getClassLoader(), c1.getClass().getInterfaces(), handler);

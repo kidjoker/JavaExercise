@@ -14,6 +14,7 @@ public class TestDiscount {
 		
 		boss.changeStrategy(new newUserDiscount());
 		System.out.println(boss.getDiscountPrice(100));
+		
 	}
 
 }
