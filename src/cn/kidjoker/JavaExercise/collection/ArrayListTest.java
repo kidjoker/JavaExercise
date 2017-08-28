@@ -16,6 +16,9 @@ public class ArrayListTest {
 		list2.add(1,"b");
 		list2.addAll(0,list);
 		
+		list2.remove("a");
+		list2.remove(2);
+		
 		for (String string : list) {
 			System.out.println(string);
 		}
