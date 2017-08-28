@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class HashSetTest {
 	@Test public void test() {
-		Set<Object> set = new HashSet<>();
+		Set<Object> set = new HashSet<>(10);
 		set.add("123");
 		set.add("456");
 		set.add("789");
