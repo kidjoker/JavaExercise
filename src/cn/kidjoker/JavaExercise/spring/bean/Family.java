@@ -1,20 +1,22 @@
 package cn.kidjoker.JavaExercise.spring.bean;
 
+import java.util.List;
+
 public class Family {
 
-	private Person person;
+	private List<Person> persons;
 	
 	private String familyName;
 
-	public Family(Person person, String familyName) {
+	public Family(List<Person> persons, String familyName) {
 		super();
-		this.person = person;
+		this.persons = persons;
 		this.familyName = familyName;
 	}
 
 	@Override
 	public String toString() {
-		return "Family [person=" + person + ", familyName=" + familyName + "]";
+		return "Family [person=" + persons + ", familyName=" + familyName + "]";
 	}
 	
 }

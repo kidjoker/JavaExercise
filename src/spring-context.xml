@@ -4,6 +4,24 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
     
-    <bean id="person" class="cn.kidjoker.JavaExercise.spring.bean.Person" />
+    <bean id="person1" class="cn.kidjoker.JavaExercise.spring.bean.Person" >
+    	<property name="personName" value="jason" />
+    	<property name="personAge" value="37" />
+    </bean>
+    
+    <bean id="person2" class="cn.kidjoker.JavaExercise.spring.bean.Person" >
+    	<property name="personName" value="kid" />
+    	<property name="personAge" value="38" />
+    </bean>
+    
+    <bean id="family" class="cn.kidjoker.JavaExercise.spring.bean.Family" >
+    	<property name="familyName" value="123" />
+    	<property name="persons">
+	    	<list>
+	    		<ref bean="person1" ></ref>
+	    		<ref bean="person2" ></ref>
+	    	</list>
+    	</property>
+    </bean>
     
 </beans>
