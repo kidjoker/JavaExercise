@@ -14,6 +14,7 @@ import cn.kidjoker.JavaExercise.spring.bean.Person;
 
 public class UrlResourceTest {
 	
+	@SuppressWarnings("resource")
 	@Test public void test() {
 //		Resource resource = new ClassPathResource("spring-context.xml");
 //		BeanFactory factory = new DefaultListableBeanFactory();
