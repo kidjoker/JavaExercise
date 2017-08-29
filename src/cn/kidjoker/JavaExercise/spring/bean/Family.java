@@ -8,9 +8,28 @@ public class Family {
 	
 	private String familyName;
 
+	public Family() {
+	}
+	
 	public Family(List<Person> persons, String familyName) {
 		super();
 		this.persons = persons;
+		this.familyName = familyName;
+	}
+	
+	public List<Person> getPersons() {
+		return persons;
+	}
+
+	public void setPersons(List<Person> persons) {
+		this.persons = persons;
+	}
+
+	public String getFamilyName() {
+		return familyName;
+	}
+
+	public void setFamilyName(String familyName) {
 		this.familyName = familyName;
 	}
 

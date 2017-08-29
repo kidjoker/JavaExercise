@@ -10,6 +10,7 @@ public class ArrayListTest {
 		List<String> list = new ArrayList<>(10);
 		list.add("2");
 		list.add(1,"3");
+		list.set(1, "4");
 		
 		List<String> list2 = new ArrayList<>();
 		list2.add("a");
