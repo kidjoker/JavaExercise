@@ -13,6 +13,7 @@ public class LinkedHashMapTest {
 		map1.put("qwe", 1);
 		map1.put("132", 2);
 		map1.put("erty", 3);
+		map1.get("132");
 		System.out.println("插入有序");
 		for(Entry<String, Object> entry : map1.entrySet()) {
 			System.out.println(entry.getKey() + " : " + entry.getValue());
@@ -28,5 +29,11 @@ public class LinkedHashMapTest {
 		for(Entry<String, Object> entry : map2.entrySet()) {
 			System.out.println(entry.getKey() + " : " + entry.getValue());
 		}
+		
+		System.out.println(map2.hashCode());
+		
+		LinkedListTest newtest = new LinkedListTest();
+		System.out.println(newtest.toString());
+		System.out.println(newtest.hashCode());
 	}
 }

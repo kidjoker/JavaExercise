@@ -17,13 +17,21 @@
  */
 package cn.kidjoker.JavaExercise.reflection;
 
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.Test;
 
 import com.sun.corba.se.spi.orb.StringPair;
 
@@ -37,27 +45,19 @@ import com.sun.corba.se.spi.orb.StringPair;
  * @since 1.0.0
  * @createTime 2017年8月21日 -上午11:21:03
  */
-public class ReflectionDemo {
+public class ReflectionDemo implements Serializable,Cloneable {
 	
-	public int pos;
+	private int pos;
 	
-	public String name;
+	private String name;
 	
-	public int size;
+	private int size;
 	
 	private final static double PI = 3.1415926;
 	
 	private List<String> aList = new ArrayList<>();
 	
-	public static double getPI() {
-		return PI;
-	}
-	
 	public ReflectionDemo() {
-	}
-	
-	public ReflectionDemo(String s,int i) {
-		
 	}
 	
 	public int getPos() {
@@ -91,210 +91,70 @@ public class ReflectionDemo {
 	public void setaList(List<String> aList) {
 		this.aList = aList;
 	}
+	
+	@SuppressWarnings({ "unused", "rawtypes", "unchecked" })
+	@Test public void test() throws ClassNotFoundException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+		
+		//通过反射生成对象
+		Class c1 = Class.forName("cn.kidjoker.JavaExercise.reflection.ReflectionDemo");
+		ReflectionDemo rd =  (ReflectionDemo) c1.newInstance();
+		
+		//获取类名
+		System.out.println(c1.getName());
+		System.out.println(c1.getSimpleName());
+		
+		//获取访问权限值
+		int modifiers = c1.getModifiers();
+		System.out.println(Modifier.isPublic(modifiers));
+		
+		//获取包信息
+		Package package1 = c1.getPackage();
+		
+		//获取父类class对象
+		Class cParent = c1.getSuperclass();
+		
+		//获取声明接口信息
+		Class[] interfaces = c1.getInterfaces();
+		
+		//构造器
+		Constructor[] ctr = c1.getConstructors();
+		
+		//属性信息
+		Field field = c1.getDeclaredField("pos");
+		field.set(rd, 5);
+		
+		Field fieldt = c1.getDeclaredField("aList");
+		Type typet = fieldt.getGenericType();
+		if(typet instanceof ParameterizedType) {
+			ParameterizedType typett = (ParameterizedType)typet;
+			for(Type typeqq : typett.getActualTypeArguments()) {
+				System.out.println(typeqq);
+			}
+		}
 
-	public static void main(String[] args) throws Exception {
-		//getClassTest();
-		applyReflectChangeObjValDemo();  
-        //reflectInvokeArrayDemo();  
-        //printClass("cn.kidjoker.JavaExercise.reflection.ReflectionDemo");  
-        //arraysAsListTest();  
-	}
-	
-	private static void getClassTest() throws Exception {
-		String str1 = "abc";
 		
-		Class c1 = str1.getClass();
-		Class c2 = String.class;
-		Class c3 = Class.forName("java.lang.String");
+		Annotation[] annos = c1.getAnnotations();
 		
-		Class c4 = int.class;
-		System.out.println("c4 is primitive " + c4.isPrimitive());
-		
-		Class c5 = Integer.TYPE;
-		System.out.println("c4 == c5 " + (c4 == c5));
-		
-		//***************************************************
-		@SuppressWarnings("unchecked")
-		Class<String> str2 = (Class<String>) Class.forName("java.lang.String");
-		Constructor<String> constructor = str2.getConstructor();
-		Constructor<String> constructor2 = str2.getConstructor(String.class);
-		
-		String s1 = constructor.newInstance();
-		String s2 = constructor2.newInstance("hjah");
-		
-		System.out.println(s1);
-	}
-	
-	private static void arraysAsListTest() throws Exception {
-		int[] aArray = new int[]{1,2,3};
-		List<int[]> aList = Arrays.asList(aArray);
-		
-		System.out.println(aList.size());
-		
-	}
-	
-	private static void reflectInvokeArrayDemo() throws Exception {
-		ReflectionDemo rd = (ReflectionDemo) Class.forName("cn.kidjoker.JavaExercise.reflection.ReflectionDemo").newInstance();
-		
-		Method m1 = null;
-		
-		try {
-			Class<? extends ReflectionDemo> c1 = rd.getClass();
-			
-			int[] intArr = new int[]{3,5};
-			m1 = c1.getMethod("printIntArray", int[].class);
-			m1.invoke(rd, intArr);
-			
-			String[] stringArr = new String[]{"abc","efg"};
-			m1 = c1.getMethod("printStringArray", String[].class);
-			m1.invoke(rd, (Object)stringArr);
-			
-			Integer[] integerArr = new Integer[]{3,5};
-			m1 = c1.getMethod("printIntegerArray", Integer[].class);
-			m1.invoke(rd, (Object)integerArr);
-		}
-		catch (Exception e) {
-			throw e;
-		}
-	}
-	
-	//输出类信息
-	public static void printClass(String className) {
-		List<String> list = new ArrayList<>();
-		Class<?> clazz = null;
-		
-		try {
-			clazz = Class.forName(className);
-		}
-		catch (ClassNotFoundException e) {
-			throw new RuntimeException("类名有问题,请重新输入!");
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		
-		//输出类修饰符
-		String modifierName = Modifier.toString(clazz.getModifiers());
-		sb.append("类信息: ");
-		if(modifierName != null && modifierName.length() != 0) {
-			sb.append(modifierName + " ");
-		}
-		
-		//输出类名称
-		sb.append(clazz.getName());
-		sb.append("\n");
-		
-		//输出属性信息
-		sb.append("属性信息:");
-		printFields(clazz,sb);
-		sb.append("\n");
-		
-		//输出构造方法信息
-		sb.append("构造器信息: ");
-		printConstructors(clazz, sb);
-		sb.append("\n");
-		
-		//输出方法信息
-		sb.append("方法信息: ");
-		printMethods(clazz, sb);
-		sb.append("\n");
-		
-		System.out.println(sb);
-	}
-	
-	public static void printIntArray(int[] array) {
-		System.out.println("------printIntArray invoked------");
-		for(int args : array) {
-			System.out.println(args);
-		}
-	}
-	
-	public static void printStringArray(String[] array) {
-		System.out.println("------printStringArray invoked------");
-		for(String s : array) {
-			System.out.println(s);
-		}
-	}
-	
-	public static void printIntegerArray(Integer[] array) {
-		System.out.println("-------printIntegerArray invoked------");
-		for(Integer i : array) {
-			System.out.println(i);
-		}
-	}
-	
-	public static void printFields(Class<?> clazz,StringBuilder sb) {
-		Field[] fields = clazz.getFields();
-		
-		for(Field field : fields) {
-			sb.append(Modifier.toString(field.getModifiers()));
-			sb.append(" " + field.getType() + " " + field.getName());
-			sb.append(",");
-		}
-		
-		if(fields != null && fields.length != 0) {
-			sb.deleteCharAt(sb.length() - 1);
-		}
-	}
-	
-	public static void printConstructors(Class<?> clazz,StringBuilder sb) {
-		Constructor<?>[] cons = clazz.getConstructors();
-		
-		for(Constructor<?> con : cons) {
-			sb.append(Modifier.toString(con.getModifiers()));
-			sb.append(" " + con.getName() + "(");
-			Class<?>[] types = con.getParameterTypes();
-			for(Class<?> type : types) {
-				sb.append(type.getName() + ",");
+		Method m = c1.getDeclaredMethod("setaList", new Class[]{List.class});
+		Type[] paramType = m.getGenericParameterTypes();
+		for(Type type : paramType) {
+			if(type instanceof ParameterizedType) {
+				ParameterizedType paramterizeType = (ParameterizedType) type;
+				for(Type typettt : paramterizeType.getActualTypeArguments()) {
+					System.out.println(typettt);
+				}
 			}
-			if(types != null & types.length != 0) {
-				sb.deleteCharAt(sb.length()-1);
-			}
-			
-			sb.append(")");
-			sb.append(",");
 		}
-		if(cons != null && cons.length != 0) {
-			sb.deleteCharAt(sb.length()-1);
-		}
-	}
-	
-	public static void printMethods(Class<?> clazz,StringBuilder sb) {
-		Method[] methods = clazz.getMethods();
 		
-		for(Method method : methods) {
-			sb.append(Modifier.toString(method.getModifiers()));
-			sb.append(" " + method.getReturnType() + " " + method.getName() + "(");
-			
-			Class<?>[] types = method.getParameterTypes();
-			for(Class<?> type : types) {
-				sb.append(type.getName());
-				sb.append(",");
-			}
-			if(types != null & types.length != 0) {
-				sb.deleteCharAt(sb.length()-1);
-			}
-			
-			sb.append(")");
-			sb.append(",");
-		}
-		if(methods != null && methods.length != 0) {
-			sb.deleteCharAt(sb.length()-1);
-		}
-	}
-	
-	private static void applyReflectChangeObjValDemo() {
-		ReflectionDemo rd = null;
-		Method m1 = null;
-		try {
-			rd = (ReflectionDemo) Class.forName("cn.kidjoker.JavaExercise.reflection.ReflectionDemo").newInstance();
-			m1 = rd.getClass().getMethod("setName", String.class);
-			m1.invoke(rd, "jason");
-			
-			m1 = rd.getClass().getMethod("getName");
-			System.out.println(m1.invoke(rd, null));
-		}
-		catch (Exception e) {
-			throw new RuntimeException("error");
-		}
+		int[] array = (int[]) Array.newInstance(int.class, 5);
+		
+		Array.set(array, 0, 123);
+		Array.set(array, 1, 465);
+		Array.set(array, 2, 789);
+		
+		System.out.println(Array.get(array, 1));
+		
+		Class arrayClass = Class.forName("I");
+		arrayClass.newInstance();
 	}
 }
