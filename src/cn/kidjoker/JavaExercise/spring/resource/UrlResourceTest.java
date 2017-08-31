@@ -26,10 +26,5 @@ public class UrlResourceTest {
 		person.setPersonAge(35);
 		System.out.println(person);
 		
-		int product = 1;
-		for (int i = 10; i <= 99; i++) {
-			product *= i;
-		}
-		System.out.println(product);
 	}
 }
