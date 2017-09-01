@@ -10,6 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
+import cn.kidjoker.JavaExercise.spring.bean.Family;
 import cn.kidjoker.JavaExercise.spring.bean.Person;
 
 public class UrlResourceTest {
@@ -22,9 +23,8 @@ public class UrlResourceTest {
 //		reader.loadBeanDefinitions(resource);
 		
 		ClassPathXmlApplicationContext cpxat = new ClassPathXmlApplicationContext("spring-context.xml");
-		Person person = (Person) cpxat.getBean("person1");
-		person.setPersonAge(35);
-		System.out.println(person);
+		Family family = (Family) cpxat.getBean("family");
+		System.out.println(family);
 		
 	}
 }
