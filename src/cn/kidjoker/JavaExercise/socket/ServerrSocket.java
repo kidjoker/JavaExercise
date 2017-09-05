@@ -7,6 +7,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.CharBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServerrSocket {
 
@@ -26,6 +29,8 @@ public class ServerrSocket {
 	static class Thread1 implements Runnable {
 		public void run() {
 			try {
+				char[] buf = new char[1024];
+				
 				serverSocket = new ServerSocket(8081);
 				
 				while(true) {
@@ -34,39 +39,15 @@ public class ServerrSocket {
 					bs = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					pw = new PrintWriter(socket.getOutputStream());
 					
-					Thread thread = Thread.currentThread();
-					thread.sleep(6000);
-					
-					System.out.println(bs.readLine());
-					pw.write("橙汁");
+					int data = bs.read(buf);
+					while(data != -1) {
+						System.out.println(buf);
+						data = bs.read(buf);
+					}
+					data = 0;
 				}
 			} 
-			catch (UnknownHostException e) {
-				e.printStackTrace();
-			} 
-			catch (IOException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			finally {
-				try {
-					if(serverSocket != null) {
-						serverSocket.close();
-					}
-					if(socket != null) {
-						socket.close();
-					}
-					if(bs != null) {
-						bs.close();
-					}
-					if(pw != null) {
-						pw.close();
-					}
-				}
-				catch (IOException e2) {
-					e2.printStackTrace();
-				}
+			catch (Exception e) {
 			}
 		}
 	}
